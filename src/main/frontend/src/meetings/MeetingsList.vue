@@ -2,15 +2,19 @@
   <table v-if="meetings.length > 0">
     <thead>
     <tr>
+      <th>id</th>
       <th>Nazwa spotkania</th>
       <th>Opis</th>
+      <th>Data</th>
       <th>Uczestnicy</th>
       <td></td>
     </tr>
     </thead>
     <tbody>
     <tr v-for="meeting in meetings" :key="meeting.name">
-      <td>{{ meeting.name }}</td>
+      <td>{{ meeting.id }}</td>
+      <td>{{ meeting.title }}</td>
+      <td>{{ meeting.date }}</td>
       <td>{{ meeting.description }}</td>
       <td>
         <ul v-if="meeting.participants">
