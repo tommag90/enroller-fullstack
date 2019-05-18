@@ -1,11 +1,13 @@
 package com.company.enroller.controllers;
 
 import com.company.enroller.model.Meeting;
+import com.company.enroller.model.Participant;
 import com.company.enroller.persistence.MeetingService;
 import com.company.enroller.persistence.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -50,5 +52,24 @@ public class MeetingRestController {
 		meetingService.deleteMeeting(meeting);
 		return new ResponseEntity("Meeting " + meeting.getId() +
 				" deleted.", HttpStatus.OK);
+	}
+    
+    @RequestMapping(value = "/{id}/participants/", method = RequestMethod.POST)
+	public ResponseEntity<?> addParticipantToMeeting(@PathVariable("id") long meetingId) 
+    	{
+		Meeting meeting = meetingService.findById(meetingId);
+		if(meeting == null) {
+			return new ResponseEntity("Meeting not found" ,HttpStatus.NOT_FOUND);
+		}		
+//		Participant participant = new ParticipantService().findByLogin(login);
+//		if(participant == null) {
+//			return new ResponseEntity("Participant not found" ,HttpStatus.NOT_FOUND);
+//		}
+        Participant login = (Participant) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+		meetingService.addParticipantToMeeting(meetingId, login);
+		return new ResponseEntity("Participant " + login.getLogin() +
+				" added to the meeting " + meeting.getId(), HttpStatus.OK);
+	
 	}
 }
