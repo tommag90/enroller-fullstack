@@ -23,9 +23,6 @@ public class MeetingRestController {
     @Autowired
     MeetingService meetingService;
 
-    @Autowired
-    ParticipantService participantService;
-
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<?> getMeetings() {
 
@@ -54,18 +51,14 @@ public class MeetingRestController {
 				" deleted.", HttpStatus.OK);
 	}
     
-    @RequestMapping(value = "/{id}/participants/", method = RequestMethod.POST)
-	public ResponseEntity<?> addParticipantToMeeting(@PathVariable("id") long meetingId) 
-    	{
-		Meeting meeting = meetingService.findById(meetingId);
-		if(meeting == null) {
-			return new ResponseEntity("Meeting not found" ,HttpStatus.NOT_FOUND);
-		}		
-        String login = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Participant participant = meetingService.addParticipantToMeeting(meeting, login);
+    @RequestMapping(value = "/{id}/participants", method = RequestMethod.POST)
+    public ResponseEntity<?> addParticipantToMeeting(@PathVariable("id") long meetingId) {
+        Meeting meeting = meetingService.findById(meetingId);
+        if (meeting == null) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        String particLogin = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Participant participant = meetingService.addParticipantToMeeting(meeting, particLogin);
         return new ResponseEntity<>(participant, HttpStatus.CREATED);
-//		return new ResponseEntity("Participant " + login +
-//				" added to the meeting " + meeting.getId(), HttpStatus.OK);
-	
-	}
+    }
 }

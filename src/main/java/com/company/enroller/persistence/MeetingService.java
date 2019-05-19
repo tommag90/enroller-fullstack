@@ -46,14 +46,14 @@ public class MeetingService {
 		transaction.commit();
 	}
     
-    public Participant addParticipantToMeeting(Meeting meeting, String login) {
-    	Participant participant = participantService.findByLogin(login);
-		meeting.addParticipant(participant);
-		Transaction transaction = connector.getSession().beginTransaction();
-		connector.getSession().update(meeting);
-		transaction.commit();
-		return participant;
-	}
+    public Participant addParticipantToMeeting(Meeting meeting, String particLogin) {
+        Participant participant = participantService.findByLogin(particLogin);
+        meeting.addParticipant(participant);
+        Transaction transaction = connector.getSession().beginTransaction();
+        connector.getSession().save(meeting);
+        transaction.commit();
+        return participant;
+    }
 
 
 }
