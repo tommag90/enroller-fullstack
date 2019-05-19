@@ -46,7 +46,8 @@
                 	.then(response => meeting.participants.push(response.body));
             },
             removeMeetingParticipant(meeting) {
-                meeting.participants.splice(meeting.participants.indexOf(this.username), 1);
+            	this.$http.delete(`meetings/${meeting.id}/participants`)
+                	.then(() => meeting.participants.splice(meeting.participants.map(p => p.login).indexOf(this.username), 1));
             },
             deleteMeeting(meeting) {
             	this.$http.delete(`meetings/${meeting.id}`)

@@ -61,4 +61,15 @@ public class MeetingRestController {
         Participant participant = meetingService.addParticipantToMeeting(meeting, particLogin);
         return new ResponseEntity<>(participant, HttpStatus.CREATED);
     }
+    
+    @RequestMapping(value = "/{id}/participants", method = RequestMethod.DELETE)
+    public ResponseEntity<?> removeParticipantFromMeeting(@PathVariable("id") long meetingId) {
+        Meeting meeting = meetingService.findById(meetingId);
+        if (meeting == null) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        String particLogin = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        meetingService.removeParticipantFromMeeting(meeting, particLogin);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

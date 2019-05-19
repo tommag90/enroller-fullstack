@@ -54,6 +54,14 @@ public class MeetingService {
         transaction.commit();
         return participant;
     }
+    
+    public void removeParticipantFromMeeting(Meeting meeting, String particLogin) {
+        Participant participant = participantService.findByLogin(particLogin);
+        meeting.removeParticipant(participant);
+        Transaction transaction = connector.getSession().beginTransaction();
+        connector.getSession().save(meeting);
+        transaction.commit();
+    }
 
 
 }
