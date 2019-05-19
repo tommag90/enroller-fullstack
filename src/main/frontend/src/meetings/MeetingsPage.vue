@@ -42,7 +42,8 @@
                  });
             },
             addMeetingParticipant(meeting) {
-                meeting.participants.push(this.username);
+            	this.$http.post(`meetings/${meeting.id}/participants`)
+                	.then(response => meeting.participants.push(response.body));
             },
             removeMeetingParticipant(meeting) {
                 meeting.participants.splice(meeting.participants.indexOf(this.username), 1);
