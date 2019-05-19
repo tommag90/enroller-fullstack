@@ -61,15 +61,11 @@ public class MeetingRestController {
 		if(meeting == null) {
 			return new ResponseEntity("Meeting not found" ,HttpStatus.NOT_FOUND);
 		}		
-//		Participant participant = new ParticipantService().findByLogin(login);
-//		if(participant == null) {
-//			return new ResponseEntity("Participant not found" ,HttpStatus.NOT_FOUND);
-//		}
-        Participant login = (Participant) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-		meetingService.addParticipantToMeeting(meetingId, login);
-		return new ResponseEntity("Participant " + login.getLogin() +
-				" added to the meeting " + meeting.getId(), HttpStatus.OK);
+        String login = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Participant participant = meetingService.addParticipantToMeeting(meeting, login);
+        return new ResponseEntity<>(participant, HttpStatus.CREATED);
+//		return new ResponseEntity("Participant " + login +
+//				" added to the meeting " + meeting.getId(), HttpStatus.OK);
 	
 	}
 }

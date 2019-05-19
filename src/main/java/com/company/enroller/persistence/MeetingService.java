@@ -5,6 +5,7 @@ import com.company.enroller.model.Participant;
 
 import org.hibernate.Query;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -13,6 +14,9 @@ import java.util.Collection;
 public class MeetingService {
 
     DatabaseConnector connector;
+    
+    @Autowired
+    ParticipantService participantService;
 
     public MeetingService() {
         connector = DatabaseConnector.getInstance();
@@ -42,12 +46,13 @@ public class MeetingService {
 		transaction.commit();
 	}
     
-    public void addParticipantToMeeting(long meetingId, Participant participant) {
-		Meeting meeting = findById(meetingId);
+    public Participant addParticipantToMeeting(Meeting meeting, String login) {
+    	Participant participant = participantService.findByLogin(login);
 		meeting.addParticipant(participant);
 		Transaction transaction = connector.getSession().beginTransaction();
 		connector.getSession().update(meeting);
 		transaction.commit();
+		return participant;
 	}
 
 
